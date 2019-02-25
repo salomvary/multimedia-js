@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Multimedia JS Examples</title>
+  </head>
+  <body>
+    <style>
+      form { display: flex; flex-direction: row; }
+      fieldset { border: 0; min-width: 300px;}
+      button {font-size: 150%;}
+    </style>
+    <form>
+      <fieldset>
+        <h2>Input</h2>
+        <p>
+          <video id="video" width="300" src="example.mp4" controls></video>
+        </p>
+        <p>
+          <label>
+            Video file:<br>
+            <input type="file" name="video">
+          </label>
+        </p>
+        <p>
+          <audio id="audio" src="example.mp3" controls></audio>
+        </p>
+        <p>
+          <label>
+            Audio file:<br>
+            <input type="file" name="audio">
+          </label>
+        </p>
+      </fieldset>
+      <fieldset>
+        <p>
+          <button>Process</button>
+        </p>
+        <p id="result-message">
+        </p>
+      </fieldset>
+      <fieldset>
+        <h2>Output</h2>
+        <p>
+          <video id="result" width="300" controls></video>
+        </p>
+        <p id="result-link">
+        </p>
+      </fieldset>
+    </form>
+    <script src="../dist/MM.umd.js"></script>
+    <script>
+      const CombineMp4sToMovFlow = MM.Flows.CombineMp4sToMovFlow
+      const FlowState = MM.Core.FlowState
+
+      MM.setEnvironmentVar(
+        'FFMPEG_BIN_PATH',
+        '../vendor/ffmpeg.js/ffmpeg-mp4.js'
+      )
+      MM.setEnvironmentVar(
+        'PROXY_WORKER_PATH',
+        // Note: MMProcessorProxyWorker.umd.js has to be served
+        // from the same origin as index.html itself
+        '../dist/MMProcessorProxyWorker.umd.js'
+      )
+
+      document.forms[0].video.onchange = function () {
+        const videoPlayer = this.form.querySelector('#video')
+        const videoUrl = URL.createObjectURL(this.files[0]);
+        videoPlayer.src = videoUrl
+      }
+
+      document.forms[0].audio.onchange = function () {
+        const audioPlayer = this.form.querySelector('#audio')
+        const audioUrl = URL.createObjectURL(this.files[0]);
+        audioPlayer.src = audioUrl
+      }
+
+      document.forms[0].onsubmit = function (event) {
+        event.preventDefault()
+        const videoPlayer = this.querySelector('#video')
+        const audioPlayer = this.querySelector('#audio')
+        const resultPlayer = this.querySelector('#result')
+        const resultMessage = this.querySelector('#result-message')
+        const submitButton = this.querySelector('button')
+
+        const videoUrl = videoPlayer.src;
+        const audioUrl = audioPlayer.src;
+
+        const isMp3Audio = true
+
+        const flow = new CombineMp4sToMovFlow(
+          videoUrl,
+          audioUrl,
+          true,
+          this.querySelector('#result-link'),
+          isMp3Audio
+        );
+
+        submitButton.disabled = true
+        submitButton.innerText = 'Processing...'
+
+        flow.whenCompleted()
+          .then((result) => {
+            submitButton.innerText = 'Process'
+            resultMessage.innerText = 'Success!';
+            submitButton.disabled = false
+            resultPlayer.src = URL.createObjectURL(result.data);
+            console.log('Flow completed with result:', result);
+          })
+          .catch((error) => {
+            submitButton.innerText = 'Process'
+            resultMessage.innerText = 'Fail! ' + error.message;
+            submitButton.disabled = false
+            console.log('Flow failed with error:', error);
+          })
+
+        flow.state = FlowState.WAITING;
+        flow.state = FlowState.FLOWING;
+      }
+    </script>
+  </body>
+</html>
