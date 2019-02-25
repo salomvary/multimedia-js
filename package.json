@@ -1,6 +1,6 @@
 {
   "name": "@salomvary/multimedia",
-  "version": "1.0.1-build.498446055.0",
+  "version": "1.0.1-build.498451929.0",
   "description": "Multimedia streaming framework for browser and node",
   "main": "index.js",
   "scripts": {
