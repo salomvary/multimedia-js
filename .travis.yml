@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+  - 11
+script:
+  - npm run lint
+  - make
+before_deploy:
+  - if [ ! $TRAVIS_TAG ]; then npm version prerelease --no-git-tag-version --preid=build.$TRAVIS_BUILD_ID; fi
+deploy:
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+    keep-history: true
+    on:
+      branch: master
+  - provider: npm
+    skip_cleanup: true
+    email: salomvary@gmail.com
+    tag: next
+    on:
+      repo: salomvary/multimedia-js
+      tags: false
+    api_key:
+      secure: JoYKDXhvDIpqK3nkVmg/FsaYTcIxA6yirELLMu92GhuXGNVn0VkAhr6KDYSyJuSSEv4ovMuxrPUocb7Yb3FM+cMShNnKjAR06wq6LV6mbFK9rxmQhMtr5KG3NJAWGZaHt9gvS969KJLpZwYPkoKm9dnwbfYkDH5oG1oT5Eba8MHhRFgfkK7Gy0plRhEGzM3Jq4o5oZBq6nP9fxIp3MSOPccaHvrBMfz5KgadiySH9qQvHp9B/IsA7JpK7UeAgq78pfnKXZ6rWY1c+Gf5LzeFTinxubU6tO1fHu3m8ph1opTfzLp1BEwufHiseb1WcLakw/ED6012NezOZPaFQTWrdx6Of38g87jsRQ6t65biirQR76sbmFRWF0+AiKbBuvFZHtC0BcnXMNWfAJxdLGZKJDjtyrZSbxZ1iTMu3lP9z/Dv0P+Wf+6eBAKFMdQZC6/I4+3LI8MGXZfqmZABRwVywK10NIKW0qp0GEyLkfzhU0O/NY1EnF6SXLQirkBkl+qoh6YpCvkxvLenOgEh2LpfRihEL7G/UeRN1iWf2UpSx//q+5KyQa7DpmQ92CsiLrexJWQHQNhIzt1bkdoSYl1U3bo3EOcxNu/wcYqUQg7FCg4f0Q+t0yJVB2D1hGrqmifU/Th4g+2fc2CZPdT4/0p/B9eobAmvoSiFmeMFBc/MInI=
+  - provider: npm
+    skip_cleanup: true
+    email: salomvary@gmail.com
+    tag: latest
+    on:
+      repo: salomvary/multimedia-js
+      tags: true
+    api_key:
+      secure: JoYKDXhvDIpqK3nkVmg/FsaYTcIxA6yirELLMu92GhuXGNVn0VkAhr6KDYSyJuSSEv4ovMuxrPUocb7Yb3FM+cMShNnKjAR06wq6LV6mbFK9rxmQhMtr5KG3NJAWGZaHt9gvS969KJLpZwYPkoKm9dnwbfYkDH5oG1oT5Eba8MHhRFgfkK7Gy0plRhEGzM3Jq4o5oZBq6nP9fxIp3MSOPccaHvrBMfz5KgadiySH9qQvHp9B/IsA7JpK7UeAgq78pfnKXZ6rWY1c+Gf5LzeFTinxubU6tO1fHu3m8ph1opTfzLp1BEwufHiseb1WcLakw/ED6012NezOZPaFQTWrdx6Of38g87jsRQ6t65biirQR76sbmFRWF0+AiKbBuvFZHtC0BcnXMNWfAJxdLGZKJDjtyrZSbxZ1iTMu3lP9z/Dv0P+Wf+6eBAKFMdQZC6/I4+3LI8MGXZfqmZABRwVywK10NIKW0qp0GEyLkfzhU0O/NY1EnF6SXLQirkBkl+qoh6YpCvkxvLenOgEh2LpfRihEL7G/UeRN1iWf2UpSx//q+5KyQa7DpmQ92CsiLrexJWQHQNhIzt1bkdoSYl1U3bo3EOcxNu/wcYqUQg7FCg4f0Q+t0yJVB2D1hGrqmifU/Th4g+2fc2CZPdT4/0p/B9eobAmvoSiFmeMFBc/MInI=
