@@ -1,3 +1,15 @@
 language: node_js
 node_js:
-  - "8.10.0"
+  - 11
+script:
+  # - npm run lint
+  - make
+deploy:
+  - provider: npm
+    skip_cleanup: true
+    email: salomvary@gmail.com
+    tag: latest
+    on:
+      repo: salomvary/multimedia-js
+      tags: true
+    api_key: $NPM_API_KEY
