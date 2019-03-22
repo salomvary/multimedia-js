@@ -60,7 +60,7 @@ export type LoggerConfig = {
   [catMatcher: string]: LoggerLevel
 };
 
-DEFAULT_GLOBAL_LEVEL = LoggerLevel.ON;
+DEFAULT_GLOBAL_LEVEL = LoggerLevel.WARN;
 
 export const defaultGlobalConfig: LoggerConfig = { '*': DEFAULT_GLOBAL_LEVEL };
 
