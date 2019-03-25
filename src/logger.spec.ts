@@ -25,10 +25,10 @@ describe('Logger', () => {
       logger = getLogger('MyCategory')
     })
 
-    it('should log all messages (default log level is ON)', () => {
+    it('should log errors only (default log level is WARN)', () => {
       logger.debug('foo');
       logger.error('bar');
-      (global.console.debug as jest.Mock).mock.calls.length.should.be.equal(1);
+      (global.console.debug as jest.Mock).mock.calls.length.should.be.equal(0);
       (global.console.error as jest.Mock).mock.calls.length.should.be.equal(1);
     });
   })
