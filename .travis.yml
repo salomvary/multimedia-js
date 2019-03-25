@@ -3,6 +3,7 @@ node_js:
   - 11
 script:
   # - npm run lint
+  - npm test
   - make
 deploy:
   - provider: npm
