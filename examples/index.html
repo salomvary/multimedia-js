@@ -64,6 +64,18 @@
         '../dist/MMProcessorProxyWorker.umd.js'
       )
 
+      if (document.forms[0].video.files.length) {
+        const videoPlayer = document.forms[0].querySelector('#video')
+        const videoUrl = URL.createObjectURL(document.forms[0].video.files[0]);
+        videoPlayer.src = videoUrl
+      }
+
+      if (document.forms[0].audio.files.length) {
+        const audioPlayer = document.forms[0].querySelector('#audio')
+        const audioUrl = URL.createObjectURL(document.forms[0].audio.files[0]);
+        audioPlayer.src = audioUrl
+      }
+
       document.forms[0].video.onchange = function () {
         const videoPlayer = this.form.querySelector('#video')
         const videoUrl = URL.createObjectURL(this.files[0]);
@@ -87,7 +99,9 @@
         const videoUrl = videoPlayer.src;
         const audioUrl = audioPlayer.src;
 
-        const isMp3Audio = true
+        const isMp3Audio = audioUrl.endsWith('.mp3') ||
+          (document.forms[0].audio.files[0] &&
+          document.forms[0].audio.files[0].name.endsWith('.mp3'))
 
         const flow = new CombineMp4sToMovFlow(
           videoUrl,
